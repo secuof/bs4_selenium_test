@@ -1,6 +1,7 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import sys
+import datetime
 
 
 # Defind call webdriver
@@ -24,13 +25,21 @@ def key_send(driver, url, elements):
 
 		driver.find_element_by_name(name).send_keys(send_msg)
 	return None
+def get_day():
+	dayintoday = datetime.datetime.today().day
+	print (dayintoday)
 
+def select_date(soup):
+	day=get_day()
+	for f in soup.find_all('a', {'class':'calendar-date'})
+		if f.text() == day:
+			
 
 if __name__ == '__main__':
 
 	elements = [
-	('id', 'Input your Naver PW'),
-	('pw', 'Input the your PW'),
+	('id', '@naver.com'),
+	('pw', ''),
 	]
 	
 	url = 'https://nid.naver.com/nidlogin.login'
@@ -38,16 +47,28 @@ if __name__ == '__main__':
 	driver = get_webdriver()
 	
 	result = key_send(driver, url, elements)
-	
+	print(get_day())
 	if result is not None:
 		(name, send_msg) = result
 		print('error', name, send_msg)
 		sys.exit(1)
 	else:
 		driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
-		print('success')
-	
+		driver.get('https://analytics.naver.com/summary/dashboard.html')
+		html = driver.page_source
+		soup = BeautifulSoup(html, 'html.parser')
+		v_count = soup.find_all('strong', {'class':'count'})
+		cal_today = soup.select(
+		#cal_num = soup.find_all('a', {'class':'calendar-date'})
+		#print(cal_num)
+#		v_count = soup.find_all('strong', {'class':'count'})
+#		for v in v_count:
+#			attrs = v.find_all('span')
+#			s = ''
+#			for att in attrs:
 
+#			print (int(s))
+		print('success')
 
 
 
